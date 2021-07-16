@@ -30,11 +30,12 @@ dataset_type = 'CustomDataset' #'PascalVOCDataset'
 data_root = '/media/Anubis/uzair/Datasets/Raleigh/'#'data/VOCdevkit/VOC2012'
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
-crop_size = (224, 224)
+X = 480
+crop_size = (X, X)
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
-    dict(type='Resize', img_scale=(224, 224)),#, ratio_range=(0.5, 2.0)),
+    dict(type='Resize', img_scale=(X, X) , ratio_range=(0.5, 2.0)),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.5),
     #dict(type='PhotoMetricDistortion'),
@@ -47,7 +48,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(224, 224),
+        img_scale=(X, X),
         # img_ratios=[0.5, 0.75, 1.0, 1.25, 1.5, 1.75],
         flip=False,
         transforms=[
@@ -58,28 +59,30 @@ test_pipeline = [
             dict(type='Collect', keys=['img']),
         ])
 ]
+IMG_DIR='concat_data/images_3x3'
+ANN_DIR='concat_data/masks_3x3'
 data = dict(
     samples_per_gpu=8,
     workers_per_gpu=4,
     train=dict(
         type=dataset_type,
         data_root=data_root,
-        img_dir='sar', #'JPEGImages',
-        ann_dir='masks',#'SegmentationClass',
+        img_dir=IMG_DIR,#'images_3x3', #'JPEGImages',
+        ann_dir=ANN_DIR,#'masks_3x3',#'SegmentationClass',
         split='train.txt',#'ImageSets/Segmentation/train.txt',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
         data_root=data_root,
-        img_dir='sar',#'JPEGImages',
-        ann_dir='masks',#'SegmentationClass',
+        img_dir=IMG_DIR,#'images_3x3',#'JPEGImages',
+        ann_dir=ANN_DIR,#'masks_3x3',#'SegmentationClass',
         split='val.txt',#'ImageSets/Segmentation/val.txt',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
         data_root=data_root,
-        img_dir='sar', #'JPEGImages',
-        ann_dir='masks',#'SegmentationClass',
+        img_dir=IMG_DIR,#'images_3x3', #'JPEGImages',
+        ann_dir=ANN_DIR,#'masks_3x3',#'SegmentationClass',
         split='test.txt',#'ImageSets/Segmentation/val.txt',
         pipeline=test_pipeline))
 
