@@ -21,7 +21,7 @@ optimizer_config = dict()
 # learning policy
 lr_config = dict(policy='poly', power=0.9, min_lr=1e-4, by_epoch=False, warmup='linear', warmup_iters=200)
 # runtime settings
-runner = dict(type='IterBasedRunner', max_iters=80000)
+runner = dict(type='IterBasedRunner', max_iters=160000)
 checkpoint_config = dict(by_epoch=False, interval=4000)
 evaluation = dict(interval=10000, metric='mIoU')
 
@@ -59,8 +59,8 @@ test_pipeline = [
             dict(type='Collect', keys=['img']),
         ])
 ]
-IMG_DIR='concat_data/images_3x3'
-ANN_DIR='concat_data/masks_3x3'
+IMG_DIR='concat_data/iter_runs_3x3/images_3x3'
+ANN_DIR='concat_data/iter_runs_3x3/masks_3x3'
 data = dict(
     samples_per_gpu=8,
     workers_per_gpu=4,
@@ -69,7 +69,7 @@ data = dict(
         data_root=data_root,
         img_dir=IMG_DIR,#'images_3x3', #'JPEGImages',
         ann_dir=ANN_DIR,#'masks_3x3',#'SegmentationClass',
-        split='train.txt',#'ImageSets/Segmentation/train.txt',
+        split='train_iter_runs_3x3.txt',#'ImageSets/Segmentation/train.txt',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
@@ -143,3 +143,4 @@ model = dict(
         subdivision_num_points=8196,
         scale_factor=2))
 #lr_config = dict(warmup='linear', warmup_iters=200)
+work_dir='./work_dirs_3x3_iters10_iterations160k/'
